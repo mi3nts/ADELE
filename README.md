@@ -1,1 +1,2 @@
-# Automated Documentation to Extract Learning from EEG (ADELE)
+# ADELE
+## Automated Documentation to Extract Learning from EEG 
