@@ -1,1 +1,1 @@
-# ADELE: Automated Documentation to Extract Learning from EEG 
+# A place for my code
