@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 11 15:04:45 2021
+# Function to create the eeg visualization and save it to the given file path
 
-@author: Arjun
-"""
 import mne
 import numpy as np
 
-# function to create eeg visualization and save it to corresponding filepath
+# inputs are the data to visualize, along with the starting row, ending row, and filepath
 def eeg_viz(data, xstart, xend, filepath):        
     # sensor names
     ch_names = ['Fp1', 'Fp2', 'F3', 'F4', 'C3', 'C4', 'P3', 'P4', 'O1', 'O2', 'F7', 'F8', 'T7', 'T8',
