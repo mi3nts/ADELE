@@ -28,6 +28,12 @@ class Group:
     start: int
     end: int
     count: int
+
+@dataclass(order=True)
+class TimeRange:
+    start
+    end
+    number
     
 def CreateFigure(nordata, altdata,value,title,unit):
     plt.clf()
@@ -150,8 +156,21 @@ def CreateEvents(nordata,norldata):
             eventNum = eventNum + 1
         labels[i] = eventNum
     return labels
-        
-        
+
+#This function returns a list of time range objects
+#For each event, there is a TimeRange object that has a start time, end time, and event number
+def CreateTimeRanges(labellist,datetimes):
+    timeRanges = []
+    currentRange = TimeRange(start = datetimes[0],end = datetimes[0], number = 0)
+    for i in range(1,len(labellist)):
+        if(labellist[i] != currentRange.number):
+            currentRange.end = datetimes[i-1]
+            timeRanges.append(currentRange)
+            currentRange = TimeRange(start = datetimes[i],end=datetimes[i],number = labellist[i])
+    currentRange.end = datetimes[len(labellist-1)]
+    timeRanges.append(currentRange)
+    return timeRanges
+
 plt.rcdefaults()
 plt.ioff()
 data = pd.DataFrame(pd.read_csv('C:\Data\School\SeniorDesign\data.csv', header = 0,usecols=[0,1,2,3,4,5,6,7,8,9,10]))
