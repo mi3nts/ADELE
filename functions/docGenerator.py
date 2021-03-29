@@ -1,57 +1,74 @@
-import pandas as pd
 import fitz
-import cv2
-import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-import plotly.express as px
 from fitz import Rect
 
-# Creates a new blank PDF
-doc = fitz.open()
-generatedPage = doc.newPage()
+# This function autogenerates a document given three heatmaps, four biometric plots, and a video frame with space for text at the bottom.
+# This function requires a title, the images of all heatmaps and bio plots, the text to be included, and the filename/location where
+# the document will be saved.
+def generateDoc(title, heatmap1, heatmap2, heatmap3, bio1, bio2, bio3, bio4, vidFrame, text, filename):
 
-# Prints the dimensions of the newly generated page.
-# These values may be useful for determining the locations of the plots
-pageRect = generatedPage.bound()
-pageArea = pageRect.getArea()
-page_x0 = pageRect.x0
-page_y0 = pageRect.y0
-page_x1 = pageRect.x1
-page_y1 = pageRect.y1
-print("Page X0 = ", page_x0)
-print("Page Y0 = ", page_y0)
-print("Page X1 = ", page_x1)
-print("Page Y1 = ", page_y1)
+    # Creates a new blank PDF
+    doc = fitz.open()
+    generatedPage = doc.newPage()
 
-# Generates the placeholder images on the pdf
+    font = "Times-Roman"
+    fontSize = 24
+    titleLength = fitz.getTextlength(titleText, font, fontSize)
 
-heatmapPlaceholder1 = fitz.Rect(10, 10, 198, 275)
-generatedPage.insertImage(heatmapPlaceholder1, filename="heatmapPlaceholder.png", keep_proportion=False)
+    # Prints the dimensions of the newly generated page.
+    # These values may be useful for determining the locations of the plots
+    pageRect = generatedPage.bound()
+    page_x0 = pageRect.x0
+    page_x1 = pageRect.x1
 
-heatmapPlaceholder2 = fitz.Rect(203, 10, 391, 275)
-generatedPage.insertImage(heatmapPlaceholder2, filename="heatmapPlaceholder.png", keep_proportion=False)
+    # Ensures that the title will always be centered, despite text length
+    pageMidpoint_X = (page_x1 - page_x0) / 2
+    titleStartPoint_X = pageMidpoint_X - (titleLength / 2)
+    titleStartPoint_Y = fontSize + 11
+    titleStartPoint = fitz.Point(titleStartPoint_X, titleStartPoint_Y)
+    generatedPage.insertText(titleStartPoint, title, fontname=font, fontsize=fontSize, rotate=0)
 
-heatmapPlaceholder3 = fitz.Rect(396, 10, 585, 275)
-generatedPage.insertImage(heatmapPlaceholder3, filename="heatmapPlaceholder.png", keep_proportion=False)
+    # Generates the placeholder images on the pdf
 
-biometricPlotPlaceholder1 = fitz.Rect(10, 285, 235, 415)
-generatedPage.insertImage(biometricPlotPlaceholder1, filename="biometricPlotPlaceholder.png", keep_proportion=False)
+    heatmap1_Location = fitz.Rect(10, 50, 198, 315)
+    generatedPage.insertImage(heatmap1_Location, filename=heatmap1, keep_proportion=False)
 
-biometricPlotPlaceholder2 = fitz.Rect(360, 285, 585, 415)
-generatedPage.insertImage(biometricPlotPlaceholder2, filename="biometricPlotPlaceholder.png", keep_proportion=False)
+    heatmap2_Location = fitz.Rect(203, 50, 391, 315)
+    generatedPage.insertImage(heatmap2_Location, filename=heatmap2, keep_proportion=False)
 
-videoframePlaceholder = fitz.Rect(185, 425, 410, 555)
-generatedPage.insertImage(videoframePlaceholder, filename="videoFramePlaceholder.jpg", keep_proportion=False)
+    heatmap3_Location = fitz.Rect(396, 50, 585, 315)
+    generatedPage.insertImage(heatmap3_Location, filename=heatmap3, keep_proportion=False)
 
-biometricPlotPlaceholder3 = fitz.Rect(10, 565, 235, 695)
-generatedPage.insertImage(biometricPlotPlaceholder3, filename="biometricPlotPlaceholder.png", keep_proportion=False)
+    bio1_Location = fitz.Rect(10, 325, 235, 455)
+    generatedPage.insertImage(bio1_Location, filename=bio1, keep_proportion=False)
 
-biometricPlotPlaceholder4 = fitz.Rect(360, 565, 585, 695)
-generatedPage.insertImage(biometricPlotPlaceholder4, filename="biometricPlotPlaceholder.png", keep_proportion=False)
+    bio2_Location = fitz.Rect(360, 325, 585, 455)
+    generatedPage.insertImage(bio2_Location, filename=bio2, keep_proportion=False)
 
-textPlaceholder = fitz.Rect(10, 705, 585, 832)
-generatedPage.insertImage(textPlaceholder, filename="textPlaceholder.png", keep_proportion=False)
+    vidFrame_Location = fitz.Rect(185, 465, 410, 595)
+    generatedPage.insertImage(vidFrame_Location, filename=vidFrame, keep_proportion=False)
 
-# Saves the PDF
-doc.save("aGeneratedDoc.pdf")
+    bio3_Location = fitz.Rect(10, 605, 235, 735)
+    generatedPage.insertImage(bio3_Location, filename=bio3, keep_proportion=False)
+
+    bio4_Location = fitz.Rect(360, 605, 585, 735)
+    generatedPage.insertImage(bio4_Location, filename=bio4, keep_proportion=False)
+
+    text_Location = fitz.Rect(10, 745, 585, 815)
+    generatedPage.insertImage(text_Location, filename=text, keep_proportion=False)
+
+    # Saves the PDF
+    doc.save(filename)
+
+    return doc
+
+# Testing the document autogenerator
+titleText = "TITLE PLACEHOLDER"
+heatmapPlaceholder = "heatmapPlaceholder.png"
+bioPlotPlaceholder = "biometricPlotPlaceholder.png"
+vidFramePlaceholder = "videoFramePlaceholder.jpg"
+textPlaceholder = "textPlaceholder.png"
+filename = "aGeneratedDoc.pdf"
+generatedDoc = generateDoc(titleText, heatmapPlaceholder, heatmapPlaceholder, heatmapPlaceholder, bioPlotPlaceholder, bioPlotPlaceholder,
+                           bioPlotPlaceholder, bioPlotPlaceholder, vidFramePlaceholder,textPlaceholder, filename)
+print("Document successfully generated!")
+
