@@ -1,10 +1,13 @@
 import fitz
 from fitz import Rect
+import pandas as pd
+import eeg_viz as eeg
+import extractFrame as vidFrame
 
 # This function autogenerates a document given three heatmaps, four biometric plots, and a video frame with space for text at the bottom.
 # This function requires a title, the images of all heatmaps and bio plots, the text to be included, and the filename/location where
 # the document will be saved.
-def generateDoc(title, heatmap1, heatmap2, heatmap3, bio1, bio2, bio3, bio4, vidFrame, text, filename):
+def generateDoc(title, data, dataStart, dataEnd, bio1, bio2, bio3, bio4, vid_filename, text, filename):
 
     # Creates a new blank PDF
     doc = fitz.open()
@@ -12,7 +15,7 @@ def generateDoc(title, heatmap1, heatmap2, heatmap3, bio1, bio2, bio3, bio4, vid
 
     font = "Times-Roman"
     fontSize = 24
-    titleLength = fitz.getTextlength(titleText, font, fontSize)
+    titleLength = fitz.getTextlength(title, font, fontSize)
 
     # Prints the dimensions of the newly generated page.
     # These values may be useful for determining the locations of the plots
@@ -27,33 +30,56 @@ def generateDoc(title, heatmap1, heatmap2, heatmap3, bio1, bio2, bio3, bio4, vid
     titleStartPoint = fitz.Point(titleStartPoint_X, titleStartPoint_Y)
     generatedPage.insertText(titleStartPoint, title, fontname=font, fontsize=fontSize, rotate=0)
 
+    # Autogenerates the EEG heatmaps
+    eeg.eeg_viz(data, dataStart, dataEnd, "eeg_")
+    fontSize = 14
+
+    # Extracts a frame from the video in the specified time range
+    extracted_frame_filename = "extracted_frame.jpg"
+    vidFrame.extractFrame(vid_filename, dataStart, dataEnd, extracted_frame_filename)
+
     # Generates the placeholder images on the pdf
 
-    heatmap1_Location = fitz.Rect(10, 50, 198, 315)
-    generatedPage.insertImage(heatmap1_Location, filename=heatmap1, keep_proportion=False)
+    heatmapAlpha_Location = fitz.Rect(10, 50, 198, 238)
+    generatedPage.insertImage(heatmapAlpha_Location, filename="eeg_alpha.png", keep_proportion=False)
+    alphaText = "Alpha Band"
+    textLength = fitz.getTextlength(alphaText, font, fontSize)
+    startPoint = fitz.Point(((10 + 94) - textLength/2), 240)
+    generatedPage.insertText(startPoint, alphaText, fontname=font, fontsize=fontSize, rotate=0)
 
-    heatmap2_Location = fitz.Rect(203, 50, 391, 315)
-    generatedPage.insertImage(heatmap2_Location, filename=heatmap2, keep_proportion=False)
+    heatmapBeta_Location = fitz.Rect(203, 50, 391, 238)
+    generatedPage.insertImage(heatmapBeta_Location, filename="eeg_beta.png", keep_proportion=False)
+    betaText = "Beta Band"
+    textLength = fitz.getTextlength(alphaText, font, fontSize)
+    startPoint = fitz.Point(((203 + 94) - textLength / 2), 240)
+    generatedPage.insertText(startPoint, betaText, fontname=font, fontsize=fontSize, rotate=0)
 
-    heatmap3_Location = fitz.Rect(396, 50, 585, 315)
-    generatedPage.insertImage(heatmap3_Location, filename=heatmap3, keep_proportion=False)
+    heatmapTheta_Location = fitz.Rect(396, 50, 585, 238)
+    generatedPage.insertImage(heatmapTheta_Location, filename="eeg_theta.png", keep_proportion=False)
+    thetaText = "Theta Band"
+    textLength = fitz.getTextlength(alphaText, font, fontSize)
+    startPoint = fitz.Point(((396 + 94) - textLength / 2), 240)
+    generatedPage.insertText(startPoint, thetaText, fontname=font, fontsize=fontSize, rotate=0)
 
-    bio1_Location = fitz.Rect(10, 325, 235, 455)
+    bio1_Location = fitz.Rect(10, 268, 198, 456)
     generatedPage.insertImage(bio1_Location, filename=bio1, keep_proportion=False)
 
-    bio2_Location = fitz.Rect(360, 325, 585, 455)
+    bio2_Location = fitz.Rect(203, 268, 391, 456)
     generatedPage.insertImage(bio2_Location, filename=bio2, keep_proportion=False)
 
-    vidFrame_Location = fitz.Rect(185, 465, 410, 595)
-    generatedPage.insertImage(vidFrame_Location, filename=vidFrame, keep_proportion=False)
-
-    bio3_Location = fitz.Rect(10, 605, 235, 735)
+    bio3_Location = fitz.Rect(396, 268, 585, 456)
     generatedPage.insertImage(bio3_Location, filename=bio3, keep_proportion=False)
 
-    bio4_Location = fitz.Rect(360, 605, 585, 735)
-    generatedPage.insertImage(bio4_Location, filename=bio4, keep_proportion=False)
+    vidFrame_Location = fitz.Rect(193, 466, 413, 590)
+    generatedPage.insertImage(vidFrame_Location, filename=extracted_frame_filename, keep_proportion=False)
 
-    text_Location = fitz.Rect(10, 745, 585, 815)
+    bio4_Location = fitz.Rect(10, 466, 188, 590)
+    generatedPage.insertImage(bio4_Location, filename=bio3, keep_proportion=False)
+
+    bio5_Location = fitz.Rect(418, 466, 585, 590)
+    generatedPage.insertImage(bio5_Location, filename=bio3, keep_proportion=False)
+
+    text_Location = fitz.Rect(10, 625, 585, 800)
     generatedPage.insertImage(text_Location, filename=text, keep_proportion=False)
 
     # Saves the PDF
@@ -62,13 +88,18 @@ def generateDoc(title, heatmap1, heatmap2, heatmap3, bio1, bio2, bio3, bio4, vid
     return doc
 
 # Testing the document autogenerator
-titleText = "TITLE PLACEHOLDER"
-heatmapPlaceholder = "heatmapPlaceholder.png"
-bioPlotPlaceholder = "biometricPlotPlaceholder.png"
-vidFramePlaceholder = "videoFramePlaceholder.jpg"
-textPlaceholder = "textPlaceholder.png"
-filename = "aGeneratedDoc.pdf"
-generatedDoc = generateDoc(titleText, heatmapPlaceholder, heatmapPlaceholder, heatmapPlaceholder, bioPlotPlaceholder, bioPlotPlaceholder,
-                           bioPlotPlaceholder, bioPlotPlaceholder, vidFramePlaceholder,textPlaceholder, filename)
-print("Document successfully generated!")
+
+# data=pd.read_csv('2020_06_04_T05_U00T_ADELE.csv')
+# dataStart = 50000
+# dataEnd = 60000
+#
+# titleText = "TITLE PLACEHOLDER"
+# bioPlotPlaceholder = "biometricPlotPlaceholder.png"
+# vidFramePlaceholder = "videoFramePlaceholder.jpg"
+# textPlaceholder = "textPlaceholder.png"
+# vid_filename = "fullstream.mp4"
+# filename = "aGeneratedDoc.pdf"
+# generatedDoc = generateDoc(titleText, data, dataStart, dataEnd, bioPlotPlaceholder, bioPlotPlaceholder,
+#                            bioPlotPlaceholder, bioPlotPlaceholder, vid_filename, textPlaceholder, filename)
+# print("Document successfully generated!")
 

@@ -1,6 +1,8 @@
 import fitz
 from fitz import Rect
 from fitz.utils import getColor
+import pandas as pd
+import docGenerator
 
 # This function takes an existing document and adds a Table of Contents page as the first page
 def generateTOC(existingDoc, filename):
@@ -64,15 +66,42 @@ def append_TOC(existingDoc, newDoc, entryname, filename, startPoint):
 
     return newStartPoint
 
+# Code to test the table of contents generator
 
-newDoc = fitz.open()
-tableOfContents = generateTOC(newDoc, "aTableOfContentsTest.pdf")
-insertedDoc = fitz.open("aGeneratedDoc.pdf")
-startPoint = fitz.Point(100, 150)
-newStartPoint = append_TOC(tableOfContents, insertedDoc, "Design Layout", "aTableOfContentsTest.pdf", startPoint)
-insertedDoc2 = fitz.open("biometricPlots.pdf")
-newStartPoint = append_TOC(tableOfContents, insertedDoc2, "Bio Plots + Video Frame", "aTableOfContentsTest.pdf", newStartPoint)
-insertedDoc3 = fitz.open("aGeneratedDoc.pdf")
-newStartPoint = append_TOC(tableOfContents, insertedDoc3, "Another Design Layout", "aTableOfContentsTest.pdf", newStartPoint)
-
-print("Table of Contents successfully generated!")
+# data=pd.read_csv('2020_06_04_T05_U00T_ADELE.csv')
+# dataStart = 10000
+# dataEnd = 20000
+# bioPlotPlaceholder = "biometricPlotPlaceholder.png"
+# vid_filename = "fullstream.mp4"
+# textPlaceholder = "textPlaceholder.png"
+#
+# newDoc = fitz.open()
+# tableOfContents = generateTOC(newDoc, "aTableOfContentsTest.pdf")
+# title = "Example 1: from %i to %i"%(dataStart, dataEnd)
+# insertedDoc = docGenerator.generateDoc(title, data, dataStart, dataEnd, bioPlotPlaceholder, bioPlotPlaceholder,
+#                            bioPlotPlaceholder, bioPlotPlaceholder, vid_filename, textPlaceholder, "TOC_Page1.pdf")
+# startPoint = fitz.Point(100, 150)
+# newStartPoint = append_TOC(tableOfContents, insertedDoc, title, "aTableOfContentsTest.pdf", startPoint)
+#
+# dataStart = 30000
+# dataEnd = 90000
+# title = "Example 2: from %i to %i"%(dataStart, dataEnd)
+# insertedDoc2 = docGenerator.generateDoc(title, data, dataStart, dataEnd, bioPlotPlaceholder, bioPlotPlaceholder,
+#                            bioPlotPlaceholder, bioPlotPlaceholder, vid_filename, textPlaceholder, "TOC_Page2.pdf")
+# newStartPoint = append_TOC(tableOfContents, insertedDoc2, title, "aTableOfContentsTest.pdf", newStartPoint)
+# 
+# dataStart = 90000
+# dataEnd = 100000
+# title = "Example 3: from %i to %i"%(dataStart, dataEnd)
+# insertedDoc3 = docGenerator.generateDoc(title, data, dataStart, dataEnd, bioPlotPlaceholder, bioPlotPlaceholder,
+#                            bioPlotPlaceholder, bioPlotPlaceholder, vid_filename, textPlaceholder, "TOC_Page3.pdf")
+# newStartPoint = append_TOC(tableOfContents, insertedDoc3, title, "aTableOfContentsTest.pdf", newStartPoint)
+#
+# dataStart = 120000
+# dataEnd = 130000
+# title = "Example 4: from %i to %i"%(dataStart, dataEnd)
+# insertedDoc3 = docGenerator.generateDoc(title, data, dataStart, dataEnd, bioPlotPlaceholder, bioPlotPlaceholder,
+#                            bioPlotPlaceholder, bioPlotPlaceholder, vid_filename, textPlaceholder, "TOC_Page4.pdf")
+# newStartPoint = append_TOC(tableOfContents, insertedDoc3, title, "aTableOfContentsTest.pdf", newStartPoint)
+#
+# print("Table of Contents successfully generated!")
