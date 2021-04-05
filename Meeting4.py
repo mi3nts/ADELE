@@ -14,7 +14,9 @@ import fitz
 from sklearn.cluster import KMeans
 import scipy.signal as sci
 from dataclasses import dataclass
+from datetime import datetime
 import math
+import re
 #BUCKETSIZE determines how wide the groups that the event creation algorithm uses. Larger buckets would mean that a wider area of peaks is added up to find the most significant events.
 BUCKETSIZE = 500
 @dataclass(order = True)
@@ -31,10 +33,39 @@ class Group:
 
 @dataclass(order=True)
 class TimeRange:
-    start
-    end
-    number
-    
+    start: datetime
+    end: datetime
+    number: int
+#Defines active areas as those where their values normalized compared to all sensors on that band
+#are greater than or equal to .8. Currently only actually examines first row
+#in each time range, as per the heatmaps functionality
+def GetActiveAreas(times,band,data):
+    first = data.index[data['Datetime']==times.start].values[0]
+    last =  data.index[data['Datetime']==times.end].values[0]
+    if band == 'theta':
+        data = data.iloc[first:last, 1:65]
+    elif band == 'alpha':
+        data = data.iloc[first:last, 65:129]
+    elif band =='beta':
+        data = data.iloc[first:last, 129:]
+    min = data.min()
+    max = data.max()
+    normalized = (data- min)/(max-min)
+    columns = []
+    for i in range(normalized.shape[1]):
+        if normalized.iloc[0,i]>= .8:
+            columns.append(normalized.columns[i])
+    return columns
+#This function calls GetActiveAreas for all bands and time ranges, and puts the output in a text file.
+def CreateText(times,data):
+    File = open("EEGMARKS.txt","w")
+    for rang in times:
+        File.write("Timeframe: " + str(rang.start) + " to "+ str(rang.end) + "\n")
+        File.write("Theta: "+ str(GetActiveAreas(rang,'theta',data))+ "\n")
+        File.write("Alpha: "+ str(GetActiveAreas(rang,'alpha',data))+ "\n")                    
+        File.write("Beta: "+ str(GetActiveAreas(rang,'beta',data))+"\n" + "\n")
+    File.close()               
+                   
 def CreateFigure(nordata, altdata,value,title,unit):
     plt.clf()
     plt.xticks(ticks = range(0,altdata.shape[0],int(altdata.shape[0]/3)))
@@ -90,9 +121,6 @@ def GroupPeaks(peakList):
 # with a threshold
 def CleanGroups(groupList,peakCount):
     groupList.sort(reverse = True)
-    print(groupList)
-    print("peakCount2" + str(peakCount))
-    print(len(groupList))
     cleanedGroups= []
     """
     x = 0
@@ -139,7 +167,6 @@ def CleanPeaks(peakList,peakCount,dataSize):
 def CreateEvents(nordata,norldata):
     peakList = []
     peakCount= math.ceil(nordata.shape[0]/15000)
-    print("PeakCount" +str(peakCount))
     for column in range(1,norldata.shape[1]):
         peakList.extend(FindPeaks(np.asarray(norldata.iloc[:,column])))
     peakList.sort()
@@ -161,12 +188,13 @@ def CreateEvents(nordata,norldata):
 #For each event, there is a TimeRange object that has a start time, end time, and event number
 def CreateTimeRanges(labellist,datetimes):
     timeRanges = []
-    currentRange = TimeRange(start = datetimes[0],end = datetimes[0], number = 0)
+    print(datetimes)
+    currentRange = TimeRange(start = datetimes.iloc[0],end = datetimes.iloc[0], number = 0)
     for i in range(1,len(labellist)):
         if(labellist[i] != currentRange.number):
-            currentRange.end = datetimes[i-1]
+            currentRange.end = datetimes.iloc[i-1]
             timeRanges.append(currentRange)
-            currentRange = TimeRange(start = datetimes[i],end=datetimes[i],number = labellist[i])
+            currentRange = TimeRange(start = datetimes.iloc[i],end=datetimes.iloc[i],number = labellist[i])
     currentRange.end = datetimes[len(labellist-1)]
     timeRanges.append(currentRange)
     return timeRanges
@@ -201,10 +229,13 @@ normadata=(normadata-normadata.min())/(normadata.max()-normadata.min())
 normadata['Datetime']=normadata['Datetime']
 print ("Asize "+ str(normadata.shape[0]))
 labels = CreateEvents(data,normadata)
+ranges = CreateTimeRanges(labels,data.loc[:,'Datetime'])
+CreateText(ranges,ekg)
 pages = PdfPages("Graphs9.pdf")
 """
 k = 10
 model = KMeans(n_clusters=k)
+"""
 """
 alterdata['Temp']=data['Temp'].rolling(20000,center = True,min_periods = 1).mean()
 alterdata['HR']=data['HR'].rolling(8000,center=True, min_periods = 1).mean()
@@ -216,7 +247,9 @@ alterdata['PupilCenter_Distance']=data['PupilCenter_Distance'].rolling(18500,cen
 alterdata['PupilDiameterDifference']=data['PupilDiameterDifference'].rolling(18500,center=True, min_periods = 1).mean()
 alterdata['AveragePupilDiameter']=data['AveragePupilDiameter'].rolling(18500,center=True, min_periods = 1).mean()
 """
+"""
 labels= model.fit_predict(normadata)
+"""
 """
 alterdata['Labels']=labels
 alterdata['Fp1_theta']=normadata['Fp1_theta']
@@ -238,3 +271,4 @@ pages.savefig(CreateClusterFigure(data,alterdata,'AveragePupilDiameter','Average
 pages.savefig(CreateClusterFigure(data,alterdata,'Fp1_theta','x','y'))
 pages.close()
 print("done")
+"""
