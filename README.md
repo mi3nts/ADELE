@@ -22,4 +22,4 @@ Libraries required:
 * (PyMuPDF)[https://github.com/pymupdf/PyMuPDF]
 * (MNE)[https://mne.tools/stable/index.html]
 # Contact
-( Placeholder )
+(Placeholder)
