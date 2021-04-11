@@ -4,6 +4,8 @@
 * Bradley Krakar 
 * Jesse Ladyman 
 * Rami Jaber
+* Ash Fernando
+* Shawhin Talebi
 
 # Introduction
 
