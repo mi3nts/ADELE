@@ -5,10 +5,10 @@
 * Jesse Ladyman 
 * Rami Jaber
 
-#Introduction
+# Introduction
 
-#Usage and Documentation
+# Usage and Documentation
 
-#Installation
+# Installation
 
-#Contact
+# Contact
