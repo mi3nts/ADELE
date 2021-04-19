@@ -15,11 +15,18 @@ ADELE is more advanced than other solutions in that it handles the data analysis
 # Usage and Documentation
 (Placeholder)
 # Installation
+[Download the repository](https://github.com/mi3nts/ADELE/archive/refs/heads/main.zip)
+
 Libraries required:
 * [Pandas](https://pandas.pydata.org/)
 * [Numpy](https://numpy.org/)
 * [OpenCV](https://github.com/opencv/opencv)
 * [PyMuPDF](https://github.com/pymupdf/PyMuPDF)
 * [MNE](https://mne.tools/stable/index.html)
+
 # Contact
-(Placeholder)
+
+Cristian Garces: cxg150730@utdallas.edu 
+Rami Jaber: rxj180009@utdallas.edu 
+Bradley Krakar: bjk170630@utdallas.edu 
+Jesse Ladyman: jessedavidladyman@gmail.com
