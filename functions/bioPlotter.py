@@ -4,7 +4,23 @@ import plotly.express as px
 # Generates a plot of the given dataset of biometric vs. index and highlights the selected values.
 def plotBiometric(data, dataStart, dataEnd, biometric, filename):
 
-    fig = px.line(data, y=biometric)
+    # Adjust dataStart and dataEnd to compensate for time axis
+    dataStart = dataStart/500
+    dataEnd = dataEnd/500
+
+    index = data.index
+    timeArray = []
+    #indexArray = []
+    indexPlaceholder = 1
+
+    for item in index:
+        setTime = indexPlaceholder / 500
+        timeArray.append(setTime)
+        indexPlaceholder = indexPlaceholder + 1
+        #indexArray.append(item*2)
+
+    fig = px.line(data, x=timeArray, y=biometric,
+                  labels={"x": "time (sec)"})
     fig.add_vrect(dataStart, dataEnd, fillcolor="yellow", opacity=0.6)
     fig.write_image(filename)
 
@@ -30,4 +46,4 @@ def addHighlightedRegion(plot, dataStart, dataEnd, filename):
 # biometric = "HR"
 # filename = "atestPlot2.png"
 # plotBiometric(data, dataStart, dataEnd, biometric, filename)
-# plotBiometric(data, 70000, 90000, "HR", "atestPlot3.png")
+# #plotBiometric(data, 70000, 90000, "HR", "atestPlot3.png")

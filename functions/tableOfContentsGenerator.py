@@ -66,6 +66,13 @@ def append_TOC(existingDoc, newDoc, entryname, filename, startPoint):
 
     return newStartPoint
 
+# Appends the cover page to the finished document
+# This should be the last page to be appended
+def append_CoverPage(reportDoc, coverpageDoc, filename):
+
+    reportDoc.insert_pdf(coverpageDoc, start_at=0)
+    reportDoc.save(filename)
+
 # Code to test the table of contents generator
 
 # data=pd.read_csv('2020_06_04_T05_U00T_ADELE.csv')
