@@ -1,0 +1,7 @@
+fitz==0.0.1.dev2
+matplotlib==3.4.1
+mne==0.22.1
+numpy==1.20.2
+pandas==1.2.4
+plotly==4.14.3
+scikit_learn==0.24.1
