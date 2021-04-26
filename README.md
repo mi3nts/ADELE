@@ -14,7 +14,8 @@ ADELE is more advanced than other solutions in that it handles the data analysis
 
 # Installation
 1. [Download the repository](https://github.com/mi3nts/ADELE/archive/refs/heads/main.zip), or use HTTPS: `git clone https://github.com/mi3nts/ADELE.git`.
-2. From the root of the repository, run `pip install -r requirements.txt` to install all required Python dependencies
+2. From the root of the repository, run `pip install -r requirements.txt` to install all required Python dependencies.
+
 *Keep in mind that this program is developed using Python 3.7*
 
 # Usage and Documentation
