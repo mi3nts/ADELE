@@ -19,7 +19,7 @@ ADELE is more advanced than other solutions in that it handles the data analysis
 *Keep in mind that this program is developed using Python 3.7*
 
 # Usage and Documentation
-Edit the Looper.py file and replace the data location with the file that you want to read, then set the number of clusters you want (and adjust any factors such as title page text and file name) and run the program
+Edit the Looper.py file and replace the data location with the file that you want to read, then set the number of clusters you want (and adjust any factors such as title page text and file name) and run the program.
 
 Libraries required:
 * [Pandas](https://pandas.pydata.org/)
@@ -30,7 +30,7 @@ Libraries required:
 
 # Contact
 
-Cristian Garces: cxg150730@utdallas.edu 
-Rami Jaber: rxj180009@utdallas.edu 
-Bradley Krakar: bjk170630@utdallas.edu 
-Jesse Ladyman: jessedavidladyman@gmail.com
+* Cristian Garces: cxg150730@utdallas.edu 
+* Rami Jaber: rxj180009@utdallas.edu 
+* Bradley Krakar: bjk170630@utdallas.edu 
+* Jesse Ladyman: jessedavidladyman@gmail.com
