@@ -3,9 +3,10 @@ from fitz import Rect
 from fitz.utils import getColor
 import pandas as pd
 import docGenerator
+import os
 
 # This function takes an existing document and adds a Table of Contents page as the first page
-def generateTOC(existingDoc, filename):
+def generateTOC(existingDoc, filename, path):
     generatedPage = existingDoc.newPage(pno=0)
 
     # Generates the Table of Contents Title
@@ -21,7 +22,7 @@ def generateTOC(existingDoc, filename):
     # Table of Contents will be page 1
     pageNumberPoint = fitz.Point(294, 815)
     generatedPage.insertText(pageNumberPoint, "1", fontname="Times-Roman", fontsize=14, rotate=0)
-    existingDoc.save(filename)
+    existingDoc.save(path + filename)
 
     return existingDoc
 
@@ -32,7 +33,7 @@ def generateTOC(existingDoc, filename):
 # For this function to work properly, the first page in existingDoc must be the table of contents
 # This function also inserts the page numbers at the bottom of all appended pages
 # This function returns the startPoint for the next entry that will be appended
-def append_TOC(existingDoc, newDoc, entryname, filename, startPoint):
+def append_TOC(existingDoc, newDoc, entryname, filename, startPoint, path):
 
     # Appends the new page to the existing document that contains the table of contents
     existingDoc.insert_pdf(newDoc)
@@ -62,13 +63,14 @@ def append_TOC(existingDoc, newDoc, entryname, filename, startPoint):
 
     # Calculates the new start point for the next entry and saves the pdf
     newStartPoint = fitz.Point(100, startPoint.y + 35)
-    existingDoc.save(filename)
+    existingDoc.save(path + filename)
 
     return newStartPoint
 
 # Appends the cover page to the finished document
 # This should be the last page to be appended
-def append_CoverPage(reportDoc, coverpageDoc, filename):
-
+def append_CoverPage(reportDoc, coverpageDoc, filename, path):
+    os.chdir(path)
     reportDoc.insert_pdf(coverpageDoc, start_at=0)
+    os.chdir("../")
     reportDoc.save(filename)

@@ -10,7 +10,7 @@ def calculatePercentIncrease(largerNum, smallerNum):
 # Generates the textbox for each page
 # Checks to make sure that the text will fit inside the textbox and
 # reduces font size as needed.
-def createTextbox(textfile, textboxRect, page):
+def createTextbox(textfile, textboxRect, page, path):
 
     fontSize = 12
     linecounter = 0

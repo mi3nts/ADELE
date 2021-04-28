@@ -11,7 +11,7 @@ import textHandler
 # This function autogenerates a document given three heatmaps, four biometric plots, and a video frame with space for text at the bottom.
 # This function requires a title, the images of all heatmaps and bio plots, the text to be included, and the filename/location where
 # the document will be saved.
-def generateDoc(title, data, dataStart, dataEnd, bio1, bio2, bio3, bio4, vid_filename, textfile, filename, pageNum):
+def generateDoc(title, data, dataStart, dataEnd, bio1, bio2, bio3, bio4, vid_filename, textfile, filename, pageNum, path):
 
     # Creates a new blank PDF
     doc = fitz.open()
@@ -35,45 +35,45 @@ def generateDoc(title, data, dataStart, dataEnd, bio1, bio2, bio3, bio4, vid_fil
     generatedPage.insertText(titleStartPoint, title, fontname=font, fontsize=fontSize, rotate=0)
 
     # Autogenerates the biometric plots
-    bio1_filename = "page%i_"% pageNum + bio1 + ".png"
+    bio1_filename = path + "page%i_"% pageNum + bio1 + ".png"
     bioPlotter.plotBiometric(data, dataStart, dataEnd, bio1, bio1_filename)
 
-    bio2_filename ="page%i_"% pageNum + bio2 + ".png"
+    bio2_filename = path + "page%i_"% pageNum + bio2 + ".png"
     bioPlotter.plotBiometric(data, dataStart, dataEnd, bio2, bio2_filename)
 
 
-    bio3_filename ="page%i_"% pageNum + bio3 + ".png"
+    bio3_filename = path + "page%i_"% pageNum + bio3 + ".png"
     bioPlotter.plotBiometric(data, dataStart, dataEnd, bio3, bio3_filename)
 
 
-    bio4_filename ="page%i_"% pageNum + bio4 + ".png"
+    bio4_filename = path + "page%i_"% pageNum + bio4 + ".png"
     bioPlotter.plotBiometric(data, dataStart, dataEnd, bio4, bio4_filename)
 
     # Autogenerates the EEG heatmaps
-    eeg.eeg_viz(data, dataStart, dataEnd, "page%i_eeg_"% pageNum)
+    eeg.eeg_viz(data, dataStart, dataEnd, path + "page%i_eeg_"% pageNum)
     fontSize = 14
 
     # Extracts a frame from the video in the specified time range
-    extracted_frame_filename = "page%i_extracted_frame.jpg"% pageNum
+    extracted_frame_filename = path + "page%i_extracted_frame.jpg"% pageNum
     vidFrame.extractFrame(vid_filename, dataStart, dataEnd, extracted_frame_filename)
 
     # Inserts heatmap visualizations
     heatmapAlpha_Location = fitz.Rect(10, 50, 198, 238)
-    generatedPage.insertImage(heatmapAlpha_Location, filename="page%i_eeg_alpha.png"% pageNum, keep_proportion=False)
+    generatedPage.insertImage(heatmapAlpha_Location, filename=path + "page%i_eeg_alpha.png"% pageNum, keep_proportion=False)
     alphaText = "Alpha Band"
     textLength = fitz.getTextlength(alphaText, font, fontSize)
     startPoint = fitz.Point(((10 + 94) - textLength/2), 240)
     generatedPage.insertText(startPoint, alphaText, fontname=font, fontsize=fontSize, rotate=0)
 
     heatmapBeta_Location = fitz.Rect(203, 50, 391, 238)
-    generatedPage.insertImage(heatmapBeta_Location, filename="page%i_eeg_beta.png"% pageNum, keep_proportion=False)
+    generatedPage.insertImage(heatmapBeta_Location, filename=path + "page%i_eeg_beta.png"% pageNum, keep_proportion=False)
     betaText = "Beta Band"
     textLength = fitz.getTextlength(alphaText, font, fontSize)
     startPoint = fitz.Point(((203 + 94) - textLength / 2), 240)
     generatedPage.insertText(startPoint, betaText, fontname=font, fontsize=fontSize, rotate=0)
 
     heatmapTheta_Location = fitz.Rect(396, 50, 585, 238)
-    generatedPage.insertImage(heatmapTheta_Location, filename="page%i_eeg_theta.png"% pageNum, keep_proportion=False)
+    generatedPage.insertImage(heatmapTheta_Location, filename=path + "page%i_eeg_theta.png"% pageNum, keep_proportion=False)
     thetaText = "Theta Band"
     textLength = fitz.getTextlength(alphaText, font, fontSize)
     startPoint = fitz.Point(((396 + 94) - textLength / 2), 240)
@@ -94,7 +94,7 @@ def generateDoc(title, data, dataStart, dataEnd, bio1, bio2, bio3, bio4, vid_fil
 
     # Generates textbox
     textboxBack_Location = fitz.Rect(250, 650, 585, 815)
-    textHandler.createTextbox(textfile, textboxBack_Location, generatedPage)
+    textHandler.createTextbox(textfile, textboxBack_Location, generatedPage, path)
 
     # Inserts video frame
     vidFrame_Location = fitz.Rect(25, 675, 245, 799)

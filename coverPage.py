@@ -1,6 +1,6 @@
 import fitz
 
-def createCoverPage(event, clustering):
+def createCoverPage(event, clustering, trial):
     
     #SETTING UP
     doc = fitz.open()
@@ -18,7 +18,7 @@ def createCoverPage(event, clustering):
     #TEXT
     header = event
     subHeader = clustering
-    infoText = "UTD - MINTS"
+    infoText = trial
     namesText = "Cristian Garces, Bradley Krakar, Jesse Ladyman, Rami Jaber"
 
     #TEXTBOXES
