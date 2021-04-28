@@ -1,10 +1,12 @@
 # ADELE: Automated Documentation to Extract Learning from EEG 
 # Authors
-* Ash Fernando
+
 * Cristian Garces 
 * Rami Jaber
 * Bradley Krakar 
 * Jesse Ladyman 
+* Ash Fernando
+* Arjun Sridhar
 * Shawhin Talebi
 
 # Introduction
