@@ -8,14 +8,29 @@ import kmeansClusters
 import coverPage
 import areaGetter
 import os
+import argparse
 
-# ENTER DETAILS OF TRIAL 
-trial_details = ["2020", "06", "04", "T05", "U00T"]
-event_descriptor = "Scrolling Twitter"
+# configure command line entry of trial details
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--trial', nargs='+',
+                    help="Provide trial details in the following manner: 'Title (in quotation marks)' YYYY MM DD TXX UXXX AA. Replace X for User and Trial as necessary. Replace AA for version of Tobii Pro used.")
+args = parser.parse_args()
+
+trial_details_full = args._get_kwargs()[0][1]
+
+event_descriptor = trial_details_full[0]
+
+if len(trial_details_full) == 7:
+    tobii_ver = trial_details_full[-1]
+    trial_details = trial_details_full[1:-1]
+else:
+    tobii_ver = None
+    trial_details = trial_details_full[1:]
 
 # paths for objects within BM3
 csv_path = "../../../objects/" + "/".join(trial_details) + "/ADELE/" + "_".join(trial_details) + "_ADELE.csv"
-fullstream_path = "../../../raw/" + "/".join(trial_details) + "/Tobii01/" + "_".join(trial_details) + "_Tobii01/segments/1/fullstream.mp4"
+fullstream_path = "../../../raw/" + "/".join(trial_details) + "/Tobii" + tobii_ver + "/" + "_".join(trial_details) + "_Tobii" + tobii_ver + "/segments/1/fullstream.mp4"
 report_path = "../../../visuals/" + "/".join(trial_details) + "/ADELE/" + "_".join(trial_details)
 report_content_path = report_path + "/static/"
 
