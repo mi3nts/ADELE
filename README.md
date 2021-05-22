@@ -18,10 +18,23 @@ ADELE is more advanced than other solutions in that it handles the data analysis
 1. [Download the repository](https://github.com/mi3nts/ADELE/archive/refs/heads/main.zip), or use HTTPS: `git clone https://github.com/mi3nts/ADELE.git`.
 2. From the root of the repository, run `pip install -r requirements.txt` to install all required Python dependencies.
 
-*Keep in mind that this program is developed using Python 3.7*
-
 # Usage and Documentation
-Edit the Looper.py file and replace the data location with the file that you want to read, then set the number of clusters you want (and adjust any factors such as title page text and file name) and run the program.
+
+An example command line execution on ADELE is shown below:
+
+~~~bash
+$ python Looper.py --trial "Twitter scrolling" 2020 06 05 T05 U00T 01
+~~~
+
+To run Looper, execute the "--trial" argument and provide the following (relevant example argument in parentheses):
+* an event descriptor ("Twitter scrolling") - this would show on the title page
+* Year, month, date of tiral (2020 06 05)
+* Trial and user data (T05 U00T)
+* Tobii Pro version used (01)
+
+Then, the event detection algorithm used will separate the total time window into subgroups, with each page of the report dedicated to one of these subgroups. There will be a progress update on the command line with the creation of each page. 
+
+The final report can be accessed at BM3/visuals/YYYY/MM/DD/TXX/UXX/ADELE/YYYY/MM/DD/TXX/UXX
 
 Libraries required:
 * [Pandas](https://pandas.pydata.org/)
