@@ -222,11 +222,14 @@ def GetActiveAreas(first,last,band,data):
     max = data.max()
     normalized = (data- min)/(max-min)
     columns = []
+    norm_vals = []
     for i in range(normalized.shape[1]):
         if normalized.iloc[0,i]>= .8:
             
             columns.append(normalized.columns[i])
+            norm_vals.append(normalized.iloc[0,i])
     # areas = FindAreas(columns)
+    norm_vals = ['{:.3f}'.format(item) for item in norm_vals]
 
     b_areas = []
     columns_stripped = []
@@ -241,7 +244,17 @@ def GetActiveAreas(first,last,band,data):
     for item in bmap:
         expl.append(areamap[item])
 
-    return columns_stripped, b_areas, bmap, expl
+    # df = pd.DataFrame({'Electrode':columns_stripped,
+    #                    'Activity value':norm_vals,
+    #                    'Broadmann label': b_areas, 
+    #                    'Mapped Broadmann Area':bmap, 
+    #                    'Explanation':expl}).set_index(['Electrode'])
+
+    # df = df.sort_values(by=['Activity value'],ascending=False).iloc[:7,:]
+    
+    # return df
+
+    return columns_stripped, norm_vals, b_areas, bmap, expl
 
 
 def FindAreas(columns):

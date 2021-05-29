@@ -9,6 +9,8 @@ import coverPage
 import areaGetter
 import os
 import argparse
+import subprocess
+from operator import itemgetter
 
 # configure command line entry of trial details
 parser = argparse.ArgumentParser()
@@ -29,9 +31,9 @@ else:
     trial_details = trial_details_full[1:]
 
 # paths for objects within BM3
-csv_path = "../../../objects/" + "/".join(trial_details) + "/ADELE/" + "_".join(trial_details) + "_ADELE.csv"
-fullstream_path = "../../../raw/" + "/".join(trial_details) + "/Tobii" + tobii_ver + "/" + "_".join(trial_details) + "_Tobii" + tobii_ver + "/segments/1/fullstream.mp4"
-report_path = "../../../visuals/" + "/".join(trial_details) + "/ADELE/" + "_".join(trial_details)
+csv_path = "../../objects/" + "/".join(trial_details) + "/ADELE/" + "_".join(trial_details) + "_ADELE.csv"
+# fullstream_path = "../../../raw/" + "/".join(trial_details) + "/Tobii" + tobii_ver + "/" + "_".join(trial_details) + "_Tobii" + tobii_ver + "/segments/1/fullstream.mp4"
+report_path = "../../visuals/" + "/".join(trial_details) + "/ADELE/" + "_".join(trial_details) + "/"
 report_content_path = report_path + "/static/"
 
 # create directory for report and statics of report
@@ -63,9 +65,11 @@ i=0
 for doc in textArray:
     file = open(doc, "w")
     areas = areaGetter.GetActiveAreas(dataStartArray[i],dataEndArray[i],"alpha",full_data)
+    # areas.to_csv(doc, sep="\t")
     zipped_areas = list(zip(*areas))
+    zipped_areas = sorted(zipped_areas, key=itemgetter(1), reverse=True)[:7]
     for j in range(len(zipped_areas)):
-        file.write(zipped_areas[j][0] + ": " + zipped_areas[j][1] + " - " + zipped_areas[j][2] + " - " + zipped_areas[j][3] + "\n")
+        file.write(zipped_areas[j][0] + ": " + zipped_areas[j][2] + " - " + zipped_areas[j][3] + " - " + zipped_areas[j][4] + "\n")
     file.close()
     i=i+1
 
@@ -76,7 +80,8 @@ bio1 = "HR"
 bio2 = "Temp"
 bio3 = "AveragePupilDiameter"
 bio4 = "HRV_rMSSD"
-vid_filename = fullstream_path
+# vid_filename = fullstream_path
+vid_filename = "/home/ash/Downloads/wallpaper.jpg"
 
 startPoint = fitz.Point(100, 150)
 
@@ -98,3 +103,10 @@ for index, entry in enumerate(dataStartArray):
 # combining title page and body
 # if you want to generate a test pdf, change "_REPORT" to whatever
 TOCGenerator.append_CoverPage(finalReportDoc, coverPage, "_".join(trial_details) + "_REPORT.pdf",report_content_path)
+# print(os.getcwd())
+# print(os.listdir())
+# os.chdir(report_path)
+# print(os.getcwd())
+# subprocess.Popen('"_".join(trial_details) + "_REPORT.pdf"',shell=True)
+# subprocess.Popen('/home/ash/Documents/BM3/visuals/2021/03/09/T03/UTA2/ADELE/2021_03_09_T03_UTA2/2021_03_09_T03_UTA2_REPORT.pdf',shell=True)
+os.system("xdg-open %s" % "_".join(trial_details) + "_REPORT.pdf")

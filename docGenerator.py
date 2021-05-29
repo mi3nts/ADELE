@@ -3,7 +3,7 @@ from fitz import Rect
 import matplotlib.pyplot as plt
 import pandas as pd
 import eeg_viz as eeg
-import extractFrame as vidFrame
+# import extractFrame as vidFrame
 import bioPlotter
 from fitz.utils import getColor
 import textHandler
@@ -54,8 +54,8 @@ def generateDoc(title, data, dataStart, dataEnd, bio1, bio2, bio3, bio4, vid_fil
     fontSize = 14
 
     # Extracts a frame from the video in the specified time range
-    extracted_frame_filename = path + "page%i_extracted_frame.jpg"% pageNum
-    vidFrame.extractFrame(vid_filename, dataStart, dataEnd, extracted_frame_filename)
+    # extracted_frame_filename = path + "page%i_extracted_frame.jpg"% pageNum
+    # vidFrame.extractFrame(vid_filename, dataStart, dataEnd, extracted_frame_filename)
 
     # Inserts heatmap visualizations
     heatmapAlpha_Location = fitz.Rect(10, 50, 198, 238)
@@ -98,7 +98,8 @@ def generateDoc(title, data, dataStart, dataEnd, bio1, bio2, bio3, bio4, vid_fil
 
     # Inserts video frame
     vidFrame_Location = fitz.Rect(25, 675, 245, 799)
-    generatedPage.insertImage(vidFrame_Location, filename=extracted_frame_filename, keep_proportion=False)
+    # generatedPage.insertImage(vidFrame_Location, filename=extracted_frame_filename, keep_proportion=False)
+    generatedPage.insertImage(vidFrame_Location, filename=vid_filename, keep_proportion=False)
 
     # Saves the PDF -- not needed anymore
     #doc.save(filename)
