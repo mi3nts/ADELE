@@ -49,3 +49,18 @@ Libraries required:
 * Rami Jaber: rxj180009@utdallas.edu 
 * Bradley Krakar: bjk170630@utdallas.edu 
 * Jesse Ladyman: jessedavidladyman@gmail.com
+
+## License
+If you find value in this dashboard please use the following citation: 
+
+`Garces, C., Jaber, R., Krakar, B., Ladyman J., Sridhar, A., Fernando, B., Talebi, S. ADELE: Automated Documentation to Extract Learning from EEG. 2021. https://github.com/mi3nts/ADELE`
+
+__Bibtex__:
+```
+@misc{ADELE,
+authors={Cristian Garces, Rami Jaber, Bradley Krakar, Jesse Ladyman, Arjun Sridhar, Bharana Fernando, & Shawhin Talebi},
+title={ADELE: Automated Documentation to Extract Learning from EEG},
+howpublished={https://github.com/mi3nts/ADELE}
+year={2021}
+}
+```
