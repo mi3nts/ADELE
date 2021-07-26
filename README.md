@@ -51,7 +51,7 @@ Libraries required:
 * Jesse Ladyman: jessedavidladyman@gmail.com
 
 ## License
-If you find value in this dashboard please use the following citation: 
+If you find value in this work please use the following citation: 
 
 `Garces, C., Jaber, R., Krakar, B., Ladyman J., Sridhar, A., Fernando, B., Talebi, S. ADELE: Automated Documentation to Extract Learning from EEG. 2021. https://github.com/mi3nts/ADELE`
 
